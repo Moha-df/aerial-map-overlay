@@ -1,0 +1,57 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "EPSG:4326"
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "orthophotoFile": "odm_orthophoto/odm_orthophoto.original.tif",
+    "createdAt": "2025-12-03T14:58:16.738Z",
+    "modifiedAt": "2025-12-03T14:58:16.739Z",
+    "application": "Registry-Orthophoto",
+    "unitPreference": "metric"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.75309494892419,
+            41.30444416656809
+          ],
+          [
+            -81.75244564138926,
+            41.30439522831068
+          ],
+          [
+            -81.75246425945544,
+            41.304067515640554
+          ],
+          [
+            -81.75300767640606,
+            41.30417587950572
+          ],
+          [
+            -81.75300651284348,
+            41.30425802611319
+          ]
+        ]
+      },
+      "properties": {
+        "measurementType": "length",
+        "unitPreference": "metric",
+        "length": 147.08,
+        "lengthValue": 0.15,
+        "unit": "km",
+        "displayValue": "0.15 km",
+        "tooltipText": "0.15 km",
+        "createdAt": "2025-12-03T14:58:14.775Z"
+      }
+    }
+  ]
+}

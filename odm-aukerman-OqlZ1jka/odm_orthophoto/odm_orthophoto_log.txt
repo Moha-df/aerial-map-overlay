@@ -1,0 +1,94 @@
+C:\ODM\SuperBuild\install\bin\odm_orthophoto_log.txt
+
+Arguments given
+-inputFiles
+D:\datasets\odm_data_aukerman\odm_texturing_25d\odm_textured_model_geo.obj
+-logFile
+D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_log.txt
+-outputFile
+D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_render.tif
+-resolution
+20.0
+-outputCornerFile
+D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_corners.txt
+
+Log file path was set to: D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_log.txt
+Writing output to: D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_render.tif
+Resolution count was set to: 20pixels/meter
+
+Reading mesh file... D:\datasets\odm_data_aukerman\odm_texturing_25d\odm_textured_model_geo.obj
+Found material0000
+Loading odm_textured_model_geo_material0000_map_Kd.png
+Found material0001
+Loading odm_textured_model_geo_material0001_map_Kd.png
+Found material0002
+Loading odm_textured_model_geo_material0002_map_Kd.png
+Found material0003
+Loading odm_textured_model_geo_material0003_map_Kd.png
+Found material0004
+Loading odm_textured_model_geo_material0004_map_Kd.png
+Found material0005
+Loading odm_textured_model_geo_material0005_map_Kd.png
+Found material0006
+Loading odm_textured_model_geo_material0006_map_Kd.png
+Found material0007
+Loading odm_textured_model_geo_material0007_map_Kd.png
+Found material0008
+Loading odm_textured_model_geo_material0008_map_Kd.png
+Found material0009
+Loading odm_textured_model_geo_material0009_map_Kd.png
+Found material0010
+Loading odm_textured_model_geo_material0010_map_Kd.png
+Found material0011
+Loading odm_textured_model_geo_material0011_map_Kd.png
+Found material0012
+Loading odm_textured_model_geo_material0012_map_Kd.png
+Found material0013
+Loading odm_textured_model_geo_material0013_map_Kd.png
+Found material0014
+Loading odm_textured_model_geo_material0014_map_Kd.png
+Found material0015
+Loading odm_textured_model_geo_material0015_map_Kd.png
+Found material0016
+Loading odm_textured_model_geo_material0016_map_Kd.png
+Found material0017
+Loading odm_textured_model_geo_material0017_map_Kd.png
+Mesh file read.
+
+Boundary points:
+Point 1: -190.03 -127.08
+Point 2: -190.03 156.926
+Point 3: 183.176 156.926
+Point 4: 183.176 -127.08
+
+Model bounds x : -190.03 -> 183.176
+Model bounds y : -127.08 -> 156.926
+Model area : 105993m2
+Model resolution, width x height : 7465x5681
+Translating and scaling mesh...
+Rendering the ortho photo...
+Texture channels: 3
+Texture depth: 8bit
+Rendering material0000 ... done
+Rendering material0001 ... done
+Rendering material0002 ... done
+Rendering material0003 ... done
+Rendering material0004 ... done
+Rendering material0005 ... done
+Rendering material0006 ... done
+Rendering material0007 ... done
+Rendering material0008 ... done
+Rendering material0009 ... done
+Rendering material0010 ... done
+Rendering material0011 ... done
+Rendering material0012 ... done
+Rendering material0013 ... done
+Rendering material0014 ... done
+Rendering material0015 ... done
+Rendering material0016 ... done
+Rendering material0017 ... done
+... model rendered
+
+Writing ortho photo to D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_render.tif
+Writing corner coordinates to D:\datasets\odm_data_aukerman\odm_orthophoto\odm_orthophoto_corners.txt
+Orthophoto generation done.

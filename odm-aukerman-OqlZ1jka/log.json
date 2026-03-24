@@ -1,0 +1,978 @@
+{
+    "odmVersion": "2.9.2",
+    "memory": {
+        "total": 32676,
+        "available": 17342
+    },
+    "cpus": 12,
+    "images": 77,
+    "options": {
+        "3d_tiles": false,
+        "auto_boundary": false,
+        "auto_boundary_distance": 0,
+        "bg_removal": false,
+        "boundary": {},
+        "build_overviews": false,
+        "camera_lens": "auto",
+        "cameras": {},
+        "cog": false,
+        "copy_to": null,
+        "crop": 3,
+        "debug": false,
+        "dem_decimation": 1,
+        "dem_euclidean_map": false,
+        "dem_gapfill_steps": 3,
+        "dem_resolution": 5,
+        "depthmap_resolution": 640,
+        "dsm": false,
+        "dtm": false,
+        "end_with": "odm_postprocess",
+        "fast_orthophoto": false,
+        "feature_quality": "high",
+        "feature_type": "sift",
+        "force_gps": false,
+        "gcp": null,
+        "geo": null,
+        "gps_accuracy": 10,
+        "ignore_gsd": false,
+        "matcher_neighbors": 0,
+        "matcher_type": "flann",
+        "max_concurrency": 12,
+        "merge": "all",
+        "mesh_octree_depth": 11,
+        "mesh_size": 200000,
+        "min_num_features": 10000,
+        "name": "D:\\datasets\\odm_data_aukerman",
+        "no_gpu": false,
+        "optimize_disk_space": false,
+        "orthophoto_compression": "DEFLATE",
+        "orthophoto_cutline": false,
+        "orthophoto_kmz": false,
+        "orthophoto_no_tiled": false,
+        "orthophoto_png": false,
+        "orthophoto_resolution": 5,
+        "pc_classify": false,
+        "pc_copc": false,
+        "pc_csv": false,
+        "pc_ept": false,
+        "pc_filter": 2.5,
+        "pc_geometric": false,
+        "pc_las": false,
+        "pc_quality": "medium",
+        "pc_rectify": false,
+        "pc_sample": 0,
+        "pc_tile": false,
+        "primary_band": "auto",
+        "project_path": "D:\\datasets\\odm_data_aukerman",
+        "radiometric_calibration": "none",
+        "rerun": null,
+        "rerun_all": false,
+        "rerun_from": null,
+        "resize_to": 2048,
+        "rolling_shutter": false,
+        "rolling_shutter_readout": 0,
+        "sfm_algorithm": "incremental",
+        "skip_3dmodel": false,
+        "skip_band_alignment": false,
+        "skip_orthophoto": false,
+        "skip_report": false,
+        "sky_removal": false,
+        "sm_cluster": null,
+        "sm_no_align": false,
+        "smrf_scalar": 1.25,
+        "smrf_slope": 0.15,
+        "smrf_threshold": 0.5,
+        "smrf_window": 18.0,
+        "split": 999999,
+        "split_image_groups": null,
+        "split_overlap": 150,
+        "texturing_data_term": "gmi",
+        "texturing_keep_unseen_faces": false,
+        "texturing_outlier_removal_type": "gauss_clamping",
+        "texturing_skip_global_seam_leveling": false,
+        "texturing_skip_local_seam_leveling": false,
+        "texturing_tone_mapping": "none",
+        "tiles": false,
+        "time": false,
+        "use_3dmesh": false,
+        "use_exif": false,
+        "use_fixed_camera_params": false,
+        "use_hybrid_bundle_adjustment": false,
+        "verbose": false
+    },
+    "startTime": "2022-11-18T10:09:33.410614",
+    "stages": [
+        {
+            "name": "dataset",
+            "startTime": "2022-11-18T10:09:34.441210",
+            "messages": [
+                {
+                    "message": "Running dataset stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Loading dataset from: D:\\datasets\\odm_data_aukerman\\images",
+                    "type": "info"
+                },
+                {
+                    "message": "Loading 77 images",
+                    "type": "info"
+                },
+                {
+                    "message": "Wrote images database: D:\\datasets\\odm_data_aukerman\\images.json",
+                    "type": "info"
+                },
+                {
+                    "message": "Found 77 usable images",
+                    "type": "info"
+                },
+                {
+                    "message": "Parsing SRS header: WGS84 UTM 17N",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished dataset stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "split",
+            "startTime": "2022-11-18T10:09:37.275500",
+            "messages": [
+                {
+                    "message": "Running split stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Normal dataset, will process all at once.",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished split stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "merge",
+            "startTime": "2022-11-18T10:09:37.277500",
+            "messages": [
+                {
+                    "message": "Running merge stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Normal dataset, nothing to merge.",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished merge stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "opensfm",
+            "startTime": "2022-11-18T10:09:37.278499",
+            "messages": [
+                {
+                    "message": "Running opensfm stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Maximum photo dimensions: 4896px",
+                    "type": "info"
+                },
+                {
+                    "message": "Photo dimensions for feature extraction: 2448px",
+                    "type": "info"
+                },
+                {
+                    "message": "CUDA drivers detected",
+                    "type": "info"
+                },
+                {
+                    "message": "Using GPU for extracting SIFT features",
+                    "type": "info"
+                },
+                {
+                    "message": "Altitude data detected, enabling it for GPS alignment",
+                    "type": "info"
+                },
+                {
+                    "message": [
+                        "use_exif_size: no",
+                        "flann_algorithm: KDTREE",
+                        "feature_process_size: 2448",
+                        "feature_min_frames: 10000",
+                        "processes: 12",
+                        "matching_gps_neighbors: 0",
+                        "matching_gps_distance: 0",
+                        "matching_graph_rounds: 50",
+                        "optimize_camera_parameters: yes",
+                        "reconstruction_algorithm: incremental",
+                        "undistorted_image_format: tif",
+                        "bundle_outlier_filtering_type: AUTO",
+                        "sift_peak_threshold: 0.066",
+                        "align_orientation_prior: vertical",
+                        "triangulation_type: ROBUST",
+                        "retriangulation_ratio: 2",
+                        "matcher_type: FLANN",
+                        "feature_type: SIFT_GPU",
+                        "use_altitude_tag: yes",
+                        "align_method: auto",
+                        "local_bundle_radius: 0"
+                    ],
+                    "type": "info"
+                },
+                {
+                    "message": "Wrote reference_lla.json",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" detect_features \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" match_features \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" create_tracks \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" reconstruct \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Export reconstruction stats",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" compute_statistics --diagram_max_points 100000 \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" export_geocoords --reconstruction --proj \"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs +type=crs\" --offset-x 437036.0 --offset-y 4572789.0 \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Updating D:\\datasets\\odm_data_aukerman\\opensfm\\config.yaml",
+                    "type": "info"
+                },
+                {
+                    "message": "undistorted_image_max_size: 4121",
+                    "type": "info"
+                },
+                {
+                    "message": "Undistorting D:\\datasets\\odm_data_aukerman\\opensfm ...",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" export_visualsfm --points \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished opensfm stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "openmvs",
+            "startTime": "2022-11-18T10:17:52.632414",
+            "messages": [
+                {
+                    "message": "Running openmvs stage",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" export_openmvs \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Depthmap resolution set to: 612px",
+                    "type": "info"
+                },
+                {
+                    "message": "Running dense reconstruction. This might take a while.",
+                    "type": "info"
+                },
+                {
+                    "message": "Estimating depthmaps",
+                    "type": "info"
+                },
+                {
+                    "message": "CUDA drivers detected",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\DensifyPointCloud\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene.mvs\"  --resolution-level 3 --dense-config-file \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\Densify.ini\" --min-resolution 612 --max-resolution 4121 --max-threads 12 --number-views-fuse 2 --sub-resolution-levels 2 -w \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\depthmaps\" -v 0 --cuda-device -1 --geometric-iters 0",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\DensifyPointCloud\" --filter-point-cloud -1 -i \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene_dense.mvs\" -v 0 --cuda-device -1 --geometric-iters 0",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished openmvs stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_filterpoints",
+            "startTime": "2022-11-18T10:20:07.838991",
+            "messages": [
+                {
+                    "message": "Running odm_filterpoints stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Filtering D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene_dense_dense_filtered.ply (statistical, meanK 16, standard deviation 2.5)",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\FPCFilter\" --input \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene_dense_dense_filtered.ply\" --output \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" --concurrency 12  --meank 16 --std 2.5",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished odm_filterpoints stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_meshing",
+            "startTime": "2022-11-18T10:20:20.017547",
+            "messages": [
+                {
+                    "message": "Running odm_meshing stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Writing ODM Mesh file in: D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.ply",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\PoissonRecon\" --in \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" --out \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.dirty.ply\" --depth 11 --pointWeight 4.0 --samplesPerNode 1.0 --threads 11 --bType 2 --linearFit ",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\ReconstructMesh\" -i \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.dirty.ply\" -o \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.ply\" --remove-spikes 0 --remove-spurious 20 --smooth 0 --target-face-num 400000 -v 0",
+                    "type": "info"
+                },
+                {
+                    "message": "Writing ODM 2.5D Mesh file in: D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.ply",
+                    "type": "info"
+                },
+                {
+                    "message": "ODM 2.5D DSM resolution: 0.14025",
+                    "type": "info"
+                },
+                {
+                    "message": "Created temporary directory: D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp",
+                    "type": "info"
+                },
+                {
+                    "message": "Creating DSM for 2.5D mesh",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal info \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" > \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpltbp6mbk.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Point cloud bounds are [minx: -190.029541, maxx: 183.3166046] [miny: -127.3603516, maxy: 156.8503571]",
+                    "type": "info"
+                },
+                {
+                    "message": "DEM resolution is (2027, 2663), max tile size is 4096, will split DEM generation into 1 tiles",
+                    "type": "info"
+                },
+                {
+                    "message": "Generating D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm_r0.7933738084913065_x0_y0.tif (max, radius: 0.7933738084913065, resolution: 0.14025)",
+                    "type": "info"
+                },
+                {
+                    "message": "Generating D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm_r0.3966869042456532_x0_y0.tif (max, radius: 0.3966869042456532, resolution: 0.14025)",
+                    "type": "info"
+                },
+                {
+                    "message": "Generating D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm_r0.1983434521228266_x0_y0.tif (max, radius: 0.1983434521228266, resolution: 0.14025)",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal pipeline -i \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpdtmjv25r.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal pipeline -i \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpi_w8hl82.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal pipeline -i \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpjrilnf9r.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdalbuildvrt -input_file_list \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles_list.txt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.vrt\" ",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdal_translate -co NUM_THREADS=12 -co BIGTIFF=IF_SAFER --config GDAL_CACHEMAX 28.1% \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.vrt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tmp.tif\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdal_translate -co NUM_THREADS=12 -co BIGTIFF=IF_SAFER --config GDAL_CACHEMAX 28.1% -outsize 10% 0 \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tmp.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.small.tif\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdalbuildvrt -resolution highest -r bilinear \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\merged.vrt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.small_filled.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tmp.tif\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdal_translate -co NUM_THREADS=12 -co TILED=YES -co BIGTIFF=IF_SAFER -co COMPRESS=DEFLATE --config GDAL_CACHEMAX 28.1% \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\merged.vrt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tif\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Starting smoothing...",
+                    "type": "info"
+                },
+                {
+                    "message": "Smoothing iteration 1",
+                    "type": "info"
+                },
+                {
+                    "message": "Smoothing completed in 0:00:00.587544",
+                    "type": "info"
+                },
+                {
+                    "message": "Completed smoothing to create D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm.tif in 0:00:00.792547",
+                    "type": "info"
+                },
+                {
+                    "message": "Completed mesh_dsm.tif in 0:01:25.592762",
+                    "type": "info"
+                },
+                {
+                    "message": "Creating mesh from DSM: D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm.tif",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\dem2mesh\" -inputFile \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm.tif\" -outputFile \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.dirty.ply\" -maxTileLength 2000 -maxVertexCount 200000 -maxConcurrency 12 -edgeSwapThreshold 0.15   ",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\ReconstructMesh\" -i \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.dirty.ply\" -o \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.ply\" --remove-spikes 0 --remove-spurious 0 --smooth 0 --target-face-num 400000 -v 0",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished odm_meshing stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "mvs_texturing",
+            "startTime": "2022-11-18T10:24:05.469744",
+            "messages": [
+                {
+                    "message": "Running mvs_texturing stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Writing MVS Textured file in: D:\\datasets\\odm_data_aukerman\\odm_texturing\\odm_textured_model_geo.obj",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\texrecon\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted/reconstruction.nvm\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.ply\" \"D:\\datasets\\odm_data_aukerman\\odm_texturing\\odm_textured_model_geo\" -d gmi -o gauss_clamping -t none --no_intermediate_results      --max_texture_size=8192 ",
+                    "type": "info"
+                },
+                {
+                    "message": "Writing MVS Textured file in: D:\\datasets\\odm_data_aukerman\\odm_texturing_25d\\odm_textured_model_geo.obj",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\texrecon\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted/reconstruction.nvm\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.ply\" \"D:\\datasets\\odm_data_aukerman\\odm_texturing_25d\\odm_textured_model_geo\" -d gmi -o gauss_clamping -t none --no_intermediate_results    --nadir_mode  --max_texture_size=8192 ",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished mvs_texturing stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_georeferencing",
+            "startTime": "2022-11-18T10:26:55.170890",
+            "messages": [
+                {
+                    "message": "Running odm_georeferencing stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Georeferencing point cloud",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal translate -i \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" -o \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" ferry transformation --filters.ferry.dimensions=\"views => UserData\" --writers.las.compression=\"lazip\" --filters.transformation.matrix=\"1 0 0 437036.0 0 1 0 4572789.0 0 0 1 0 0 0 0 1\" --writers.las.offset_x=437036.0 --writers.las.offset_y=4572789.0 --writers.las.scale_x=0.001 --writers.las.scale_y=0.001 --writers.las.scale_z=0.001 --writers.las.offset_z=0 --writers.las.a_srs=\"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs +type=crs\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Calculating cropping area and generating bounds shapefile from point cloud",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal translate -i \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" -o \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.decimated.las\" decimation --filters.decimation.step=40 ",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal info --boundary --filters.hexbin.edge_size=1 --filters.hexbin.threshold=0 \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.decimated.las\" > \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.boundary.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal info --summary \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" > \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.summary.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running ogr2ogr -overwrite -f GPKG -a_srs \"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs\" \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.gpkg\" \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.geojson\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished odm_georeferencing stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_dem",
+            "startTime": "2022-11-18T10:27:10.451758",
+            "messages": [
+                {
+                    "message": "Running odm_dem stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Maximum resolution set to 2.0 * (GSD - 10.0%) (5.05 cm / pixel, requested resolution was 5.00 cm / pixel)",
+                    "type": "warning"
+                },
+                {
+                    "message": "Classify: False",
+                    "type": "info"
+                },
+                {
+                    "message": "Create DSM: False",
+                    "type": "info"
+                },
+                {
+                    "message": "Create DTM: False",
+                    "type": "info"
+                },
+                {
+                    "message": "DEM input file D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz found: True",
+                    "type": "info"
+                },
+                {
+                    "message": "DEM will not be generated",
+                    "type": "warning"
+                },
+                {
+                    "message": "Finished odm_dem stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_orthophoto",
+            "startTime": "2022-11-18T10:27:10.452758",
+            "messages": [
+                {
+                    "message": "Running odm_orthophoto stage",
+                    "type": "info"
+                },
+                {
+                    "message": "running \"C:\\ODM\\SuperBuild\\install\\bin\\odm_orthophoto\" -inputFiles \"D:\\datasets\\odm_data_aukerman\\odm_texturing_25d\\odm_textured_model_geo.obj\" -logFile \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_log.txt\" -outputFile \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_render.tif\" -resolution 20.0  -outputCornerFile \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_corners.txt\"  ",
+                    "type": "info"
+                },
+                {
+                    "message": "Creating GeoTIFF",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdal_translate -a_ullr 436845.970459 4572945.926392 437219.175705 4572661.920151 -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=IF_SAFER -co BLOCKXSIZE=512 -co BLOCKYSIZE=512 -co NUM_THREADS=12 -a_srs \"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs +type=crs\" --config GDAL_CACHEMAX 27.55% --config GDAL_TIFF_INTERNAL_MASK YES \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_render.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif\" > \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\gdal_translate_log.txt\"",
+                    "type": "info"
+                },
+                {
+                    "message": "Cropping D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdalwarp -cutline \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.gpkg\" -crop_to_cutline -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=IF_SAFER -co BLOCKXSIZE=512 -co BLOCKYSIZE=512 -co NUM_THREADS=12 -dstalpha \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.original.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif\" --config GDAL_CACHEMAX 27.4%",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished odm_orthophoto stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_report",
+            "startTime": "2022-11-18T10:27:20.802268",
+            "messages": [
+                {
+                    "message": "Running odm_report stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Exporting shots.geojson",
+                    "type": "info"
+                },
+                {
+                    "message": "Wrote D:\\datasets\\odm_data_aukerman\\odm_report\\shots.geojson",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal info --dimensions \"X,Y,Z\" \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" > \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.info.json\"",
+                    "type": "info"
+                },
+                {
+                    "message": "running pdal translate -i \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" -o \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif\" --writer gdal --writers.gdal.resolution=0.26667642857143486 --writers.gdal.data_type=uint8_t --writers.gdal.dimension=UserData --writers.gdal.output_type=max --writers.gdal.radius=0.37713742205094314 ",
+                    "type": "info"
+                },
+                {
+                    "message": "Cropping D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdalwarp -cutline \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.gpkg\" -crop_to_cutline -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=IF_SAFER -co BLOCKXSIZE=512 -co BLOCKYSIZE=512 -co NUM_THREADS=12  \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.original.tif\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif\" --config GDAL_CACHEMAX 28.05%",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdaldem color-relief \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif\" \"C:\\ODM\\opendm\\report\\overlap_color_map.txt\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.png\" -of PNG -alpha",
+                    "type": "info"
+                },
+                {
+                    "message": "running gdal_translate -of png \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\ortho.png\" -outsize 1400 0  --config GDAL_CACHEMAX 28.1% ",
+                    "type": "info"
+                },
+                {
+                    "message": "Exporting report to D:\\datasets\\odm_data_aukerman\\odm_report\\report.pdf",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished odm_report stage",
+                    "type": "info"
+                }
+            ]
+        },
+        {
+            "name": "odm_postprocess",
+            "startTime": "2022-11-18T10:27:45.338473",
+            "messages": [
+                {
+                    "message": "Running odm_postprocess stage",
+                    "type": "info"
+                },
+                {
+                    "message": "Post Processing",
+                    "type": "info"
+                },
+                {
+                    "message": "Finished odm_postprocess stage",
+                    "type": "info"
+                },
+                {
+                    "message": "No more stages to run",
+                    "type": "info"
+                }
+            ],
+            "endTime": "2022-11-18T10:27:45.338473",
+            "totalTime": 0.0
+        }
+    ],
+    "processes": [
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" detect_features \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0,
+            "output": [
+                "2022-11-18 10:09:50,634 INFO: Extracting ROOT_SIFT_GPU features for image DSC00247.JPG",
+                "2022-11-18 10:09:50,858 INFO: Extracting ROOT_SIFT_GPU features for image DSC00272.JPG",
+                "2022-11-18 10:09:51,026 INFO: Extracting ROOT_SIFT_GPU features for image DSC00292.JPG",
+                "2022-11-18 10:09:51,420 INFO: Extracting ROOT_SIFT_GPU features for image DSC00249.JPG",
+                "2022-11-18 10:09:51,558 INFO: Extracting ROOT_SIFT_GPU features for image DSC00273.JPG",
+                "2022-11-18 10:09:51,589 INFO: Extracting ROOT_SIFT_GPU features for image DSC00293.JPG",
+                "2022-11-18 10:09:51,946 INFO: Extracting ROOT_SIFT_GPU features for image DSC00251.JPG",
+                "2022-11-18 10:09:52,433 INFO: Extracting ROOT_SIFT_GPU features for image DSC00274.JPG",
+                "2022-11-18 10:09:52,509 INFO: Extracting ROOT_SIFT_GPU features for image DSC00294.JPG",
+                "2022-11-18 10:09:52,563 INFO: Extracting ROOT_SIFT_GPU features for image DSC00252.JPG"
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" match_features \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0,
+            "output": [
+                "2022-11-18 10:15:20,022 DEBUG: Matching DSC00263.JPG and DSC00249.JPG.  Matcher: FLANN (symmetric) T-desc: 3.924 T-robust: 0.001 T-total: 3.924 Matches: 274 Robust: 246 Success: True",
+                "2022-11-18 10:15:20,171 DEBUG: Matching DSC00293.JPG and DSC00249.JPG.  Matcher: FLANN (symmetric) T-desc: 4.794 T-robust: 0.002 T-total: 4.796 Matches: 986 Robust: 943 Success: True",
+                "2022-11-18 10:15:20,232 DEBUG: Matching DSC00258.JPG and DSC00307.JPG.  Matcher: FLANN (symmetric) T-desc: 5.749 T-robust: 0.003 T-total: 5.753 Matches: 92 Robust: 60 Success: True",
+                "2022-11-18 10:15:20,748 DEBUG: Matching DSC00229.JPG and DSC00294.JPG.  Matcher: FLANN (symmetric) T-desc: 4.837 T-robust: 0.013 T-total: 4.851 Matches: 55 Robust: 11 Success: False",
+                "2022-11-18 10:15:21,067 DEBUG: Matching DSC00275.JPG and DSC00274.JPG.  Matcher: FLANN (symmetric) T-desc: 2.406 T-robust: 0.001 T-total: 2.407 Matches: 433 Robust: 377 Success: True",
+                "2022-11-18 10:15:21,104 DEBUG: Matching DSC00283.JPG and DSC00294.JPG.  Matcher: FLANN (symmetric) T-desc: 3.079 T-robust: 0.001 T-total: 3.080 Matches: 344 Robust: 317 Success: True",
+                "2022-11-18 10:15:21,237 DEBUG: Matching DSC00247.JPG and DSC00289.JPG.  Matcher: FLANN (symmetric) T-desc: 2.422 T-robust: 0.002 T-total: 2.425 Matches: 1933 Robust: 1899 Success: True",
+                "2022-11-18 10:15:21,308 DEBUG: Matching DSC00268.JPG and DSC00284.JPG.  Matcher: FLANN (symmetric) T-desc: 5.390 T-robust: 0.012 T-total: 5.402 Matches: 119 Robust: 52 Success: True",
+                "2022-11-18 10:15:21,464 DEBUG: Matching DSC00233.JPG and DSC00276.JPG.  Matcher: FLANN (symmetric) T-desc: 4.348 T-robust: 0.011 T-total: 4.359 Matches: 58 Robust: 10 Success: False",
+                "2022-11-18 10:15:21,466 INFO: Matched 713 pairs (brown-brown: 713) in 325.4715292 seconds (0.45648180855539966 seconds/pair)."
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" create_tracks \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0,
+            "output": [
+                "2022-11-18 10:15:22,835 INFO: reading features",
+                "2022-11-18 10:15:26,201 DEBUG: Merging features onto tracks",
+                "2022-11-18 10:15:27,769 DEBUG: Good tracks: 65200"
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" reconstruct \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0,
+            "output": [
+                "2022-11-18 10:16:29,587 INFO: DSC00268.JPG resection inliers: 32 / 33",
+                "2022-11-18 10:16:29,590 INFO: Adding DSC00268.JPG to the reconstruction",
+                "2022-11-18 10:16:29,777 INFO: -------------------------------------------------------",
+                "2022-11-18 10:16:29,779 INFO: Some images can not be added",
+                "2022-11-18 10:16:29,779 INFO: -------------------------------------------------------",
+                "2022-11-18 10:16:29,781 INFO: Shots and/or GCPs are well-conditioned. Using naive 3D-3D alignment.",
+                "2022-11-18 10:16:39,309 DEBUG: Ceres Solver Report: Iterations: 50, Initial cost: 1.549023e+04, Final cost: 9.387464e+03, Termination: CONVERGENCE",
+                "2022-11-18 10:16:40,118 INFO: Removed outliers: 318",
+                "2022-11-18 10:16:40,561 INFO: Reconstruction 0: 73 images, 55957 points",
+                "2022-11-18 10:16:40,561 INFO: 1 partial reconstructions in total."
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" compute_statistics --diagram_max_points 100000 \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0,
+            "output": [
+                "2022-11-18 10:16:54,038 DEBUG: locator: <matplotlib.colorbar._ColorbarAutoLocator object at 0x000002BC66B43EE0>",
+                "2022-11-18 10:16:54,038 DEBUG: Using auto colorbar locator <matplotlib.colorbar._ColorbarAutoLocator object at 0x000002BC66B43EE0> on colorbar",
+                "2022-11-18 10:16:54,038 DEBUG: Setting pcolormesh",
+                "2022-11-18 10:16:55,259 DEBUG: locator: <matplotlib.colorbar._ColorbarAutoLocator object at 0x000002BC5B60D640>",
+                "2022-11-18 10:16:55,260 DEBUG: Using auto colorbar locator <matplotlib.colorbar._ColorbarAutoLocator object at 0x000002BC5B60D640> on colorbar",
+                "2022-11-18 10:16:55,260 DEBUG: Setting pcolormesh"
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" export_geocoords --reconstruction --proj \"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs +type=crs\" --offset-x 437036.0 --offset-y 4572789.0 \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" export_visualsfm --points \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\opensfm\\bin\\opensfm\" export_openmvs \"D:\\datasets\\odm_data_aukerman\\opensfm\"",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\DensifyPointCloud\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene.mvs\"  --resolution-level 3 --dense-config-file \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\Densify.ini\" --min-resolution 612 --max-resolution 4121 --max-threads 12 --number-views-fuse 2 --sub-resolution-levels 2 -w \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\depthmaps\" -v 0 --cuda-device -1 --geometric-iters 0",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\DensifyPointCloud\" --filter-point-cloud -1 -i \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene_dense.mvs\" -v 0 --cuda-device -1 --geometric-iters 0",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\FPCFilter\" --input \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted\\openmvs\\scene_dense_dense_filtered.ply\" --output \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" --concurrency 12  --meank 16 --std 2.5",
+            "exitCode": 0,
+            "output": [
+                "-> Statistical filtering",
+                "",
+                "?> Done in 8.917s",
+                "",
+                "-> Writing output",
+                "",
+                "?> Done in 3.235s",
+                "",
+                "?> Pipeline done in 12.15s",
+                ""
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\PoissonRecon\" --in \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" --out \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.dirty.ply\" --depth 11 --pointWeight 4.0 --samplesPerNode 1.0 --threads 11 --bType 2 --linearFit ",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\ReconstructMesh\" -i \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.dirty.ply\" -o \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.ply\" --remove-spikes 0 --remove-spurious 20 --smooth 0 --target-face-num 400000 -v 0",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal info \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" > \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpltbp6mbk.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal pipeline -i \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpjrilnf9r.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal pipeline -i \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpi_w8hl82.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal pipeline -i \"C:\\Users\\IT2~1\\AppData\\Local\\Temp\\tmpdtmjv25r.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "gdalbuildvrt -input_file_list \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles_list.txt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.vrt\" ",
+            "exitCode": 0,
+            "output": [
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "gdal_translate -co NUM_THREADS=12 -co BIGTIFF=IF_SAFER --config GDAL_CACHEMAX 28.1% \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.vrt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tmp.tif\"",
+            "exitCode": 0,
+            "output": [
+                "Input file size is 2663, 2027",
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "gdal_translate -co NUM_THREADS=12 -co BIGTIFF=IF_SAFER --config GDAL_CACHEMAX 28.1% -outsize 10% 0 \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tmp.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.small.tif\"",
+            "exitCode": 0,
+            "output": [
+                "Input file size is 2663, 2027",
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "gdalbuildvrt -resolution highest -r bilinear \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\merged.vrt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.small_filled.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tmp.tif\"",
+            "exitCode": 0,
+            "output": [
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "gdal_translate -co NUM_THREADS=12 -co TILED=YES -co BIGTIFF=IF_SAFER -co COMPRESS=DEFLATE --config GDAL_CACHEMAX 28.1% \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\merged.vrt\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\tiles.tif\"",
+            "exitCode": 0,
+            "output": [
+                "Input file size is 2663, 2027",
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\dem2mesh\" -inputFile \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\tmp\\mesh_dsm.tif\" -outputFile \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.dirty.ply\" -maxTileLength 2000 -maxVertexCount 200000 -maxConcurrency 12 -edgeSwapThreshold 0.15   ",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\OpenMVS\\ReconstructMesh\" -i \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.dirty.ply\" -o \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.ply\" --remove-spikes 0 --remove-spurious 0 --smooth 0 --target-face-num 400000 -v 0",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\texrecon\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted/reconstruction.nvm\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_mesh.ply\" \"D:\\datasets\\odm_data_aukerman\\odm_texturing\\odm_textured_model_geo\" -d gmi -o gauss_clamping -t none --no_intermediate_results      --max_texture_size=8192 ",
+            "exitCode": 0,
+            "output": [
+                "Working on atlas 30 95%...",
+                "Working on atlas 31 96%...",
+                "Working on atlas 31 97%...",
+                "Working on atlas 31 98%...",
+                "Working on atlas 32 99%...",
+                "Working on atlas 32 100%... done.",
+                "Finalizing texture atlases... done. (Took: 0s)",
+                "Building objmodel:",
+                "Saving model... done.",
+                "Whole texturing procedure took: 110.722s"
+            ]
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\texrecon\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\undistorted/reconstruction.nvm\" \"D:\\datasets\\odm_data_aukerman\\odm_meshing\\odm_25dmesh.ply\" \"D:\\datasets\\odm_data_aukerman\\odm_texturing_25d\\odm_textured_model_geo\" -d gmi -o gauss_clamping -t none --no_intermediate_results    --nadir_mode  --max_texture_size=8192 ",
+            "exitCode": 0,
+            "output": [
+                "Working on atlas 17 95%...",
+                "Working on atlas 18 96%...",
+                "Working on atlas 18 97%...",
+                "Working on atlas 18 98%...",
+                "Working on atlas 18 99%...",
+                "Working on atlas 18 100%... done.",
+                "Finalizing texture atlases... done. (Took: 0s)",
+                "Building objmodel:",
+                "Saving model... done.",
+                "Whole texturing procedure took: 58.766s"
+            ]
+        },
+        {
+            "command": "pdal translate -i \"D:\\datasets\\odm_data_aukerman\\odm_filterpoints\\point_cloud.ply\" -o \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" ferry transformation --filters.ferry.dimensions=\"views => UserData\" --writers.las.compression=\"lazip\" --filters.transformation.matrix=\"1 0 0 437036.0 0 1 0 4572789.0 0 0 1 0 0 0 0 1\" --writers.las.offset_x=437036.0 --writers.las.offset_y=4572789.0 --writers.las.scale_x=0.001 --writers.las.scale_y=0.001 --writers.las.scale_z=0.001 --writers.las.offset_z=0 --writers.las.a_srs=\"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs +type=crs\"",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal translate -i \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" -o \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.decimated.las\" decimation --filters.decimation.step=40 ",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal info --boundary --filters.hexbin.edge_size=1 --filters.hexbin.threshold=0 \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.decimated.las\" > \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.boundary.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal info --summary \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" > \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.summary.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "ogr2ogr -overwrite -f GPKG -a_srs \"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs\" \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.gpkg\" \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.geojson\"",
+            "exitCode": 0
+        },
+        {
+            "command": "\"C:\\ODM\\SuperBuild\\install\\bin\\odm_orthophoto\" -inputFiles \"D:\\datasets\\odm_data_aukerman\\odm_texturing_25d\\odm_textured_model_geo.obj\" -logFile \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_log.txt\" -outputFile \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_render.tif\" -resolution 20.0  -outputCornerFile \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_corners.txt\"  ",
+            "exitCode": 0
+        },
+        {
+            "command": "gdal_translate -a_ullr 436845.970459 4572945.926392 437219.175705 4572661.920151 -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=IF_SAFER -co BLOCKXSIZE=512 -co BLOCKYSIZE=512 -co NUM_THREADS=12 -a_srs \"+proj=utm +zone=17 +datum=WGS84 +units=m +no_defs +type=crs\" --config GDAL_CACHEMAX 27.55% --config GDAL_TIFF_INTERNAL_MASK YES \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto_render.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif\" > \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\gdal_translate_log.txt\"",
+            "exitCode": 0
+        },
+        {
+            "command": "gdalwarp -cutline \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.gpkg\" -crop_to_cutline -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=IF_SAFER -co BLOCKXSIZE=512 -co BLOCKYSIZE=512 -co NUM_THREADS=12 -dstalpha \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.original.tif\" \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif\" --config GDAL_CACHEMAX 27.4%",
+            "exitCode": 0,
+            "output": [
+                "Using band 4 of source image as alpha.",
+                "Creating output file that is 6938P x 5544L.",
+                "Processing D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.original.tif [1/1] : 0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "pdal info --dimensions \"X,Y,Z\" \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" > \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.info.json\"",
+            "exitCode": 0
+        },
+        {
+            "command": "pdal translate -i \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.laz\" -o \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif\" --writer gdal --writers.gdal.resolution=0.26667642857143486 --writers.gdal.data_type=uint8_t --writers.gdal.dimension=UserData --writers.gdal.output_type=max --writers.gdal.radius=0.37713742205094314 ",
+            "exitCode": 0
+        },
+        {
+            "command": "gdalwarp -cutline \"D:\\datasets\\odm_data_aukerman\\odm_georeferencing\\odm_georeferenced_model.bounds.gpkg\" -crop_to_cutline -co TILED=YES -co COMPRESS=DEFLATE -co PREDICTOR=2 -co BIGTIFF=IF_SAFER -co BLOCKXSIZE=512 -co BLOCKYSIZE=512 -co NUM_THREADS=12  \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.original.tif\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif\" --config GDAL_CACHEMAX 28.05%",
+            "exitCode": 0,
+            "output": [
+                "Creating output file that is 1299P x 1038L.",
+                "Processing D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.original.tif [1/1] : 0Using internal nodata values (e.g. 255) for image D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.original.tif.",
+                "Copying nodata values from source D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.original.tif to destination D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif.",
+                "...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "gdaldem color-relief \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.tif\" \"C:\\ODM\\opendm\\report\\overlap_color_map.txt\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\overlap.png\" -of PNG -alpha",
+            "exitCode": 0,
+            "output": [
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        },
+        {
+            "command": "gdal_translate -of png \"D:\\datasets\\odm_data_aukerman\\odm_orthophoto\\odm_orthophoto.tif\" \"D:\\datasets\\odm_data_aukerman\\opensfm\\stats\\ortho.png\" -outsize 1400 0  --config GDAL_CACHEMAX 28.1% ",
+            "exitCode": 0,
+            "output": [
+                "Input file size is 6938, 5544",
+                "0...10...20...30...40...50...60...70...80...90...100 - done."
+            ]
+        }
+    ],
+    "success": true,
+    "endTime": "2022-11-18T10:27:45.338473",
+    "totalTime": 1091.93
+}

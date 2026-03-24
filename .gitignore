@@ -1,0 +1,16 @@
+drone_overlay
+*.o
+imgui_lib/
+stb_image.h
+stb_image_resize2.h
+imgui.ini
+# ODM large files
+odm-aukerman-OqlZ1jka/odm_filterpoints/
+odm-aukerman-OqlZ1jka/odm_orthophoto/*.tif
+odm-aukerman-OqlZ1jka/odm_georeferencing/*.laz
+odm-aukerman-OqlZ1jka/odm_georeferencing/*.gpkg
+odm-aukerman-OqlZ1jka/odm_meshing/
+odm-aukerman-OqlZ1jka/odm_texturing/
+odm-aukerman-OqlZ1jka/odm_texturing_25d/
+odm-aukerman-OqlZ1jka/odm_report/report.pdf
+odm-aukerman-OqlZ1jka/.ddb/
