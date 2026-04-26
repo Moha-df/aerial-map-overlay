@@ -1,3 +1,20 @@
+# De Franceschi Mohamed
+
+Repertoire github : https://github.com/Moha-df/aerial-map-overlay 
+
+Video demonstration de la version 1 sans le recadrage ( le recadrage ajoute juste un bouton pour lactiver): https://youtu.be/5rvHrgXrc3o
+
+Photo avec et sans recadrage :
+
+**Sans recadrage (GPS brut) :**
+
+![Sans recadrage](without.png)
+
+**Avec recadrage (ORB + RANSAC) :**
+
+![Avec recadrage](with.png)
+
+
 # Drone Image Overlay on Satellite View
 
 Application OpenGL/C++ qui affiche une vue satellite (ArcGIS World Imagery) et superpose des images prises par drone à leur position géographique correcte.
