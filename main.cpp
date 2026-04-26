@@ -25,11 +25,15 @@
 #include <fstream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#define STBI_MAX_DIMENSIONS 2048
 #include "stb_image.h"
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "stb_image_resize2.h"
+
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/features2d.hpp>
+#include <opencv2/calib3d.hpp>
 
 // Simple JSON value parser (minimal, for our specific JSON files)
 #include <sstream>
@@ -41,6 +45,16 @@ static const int INITIAL_ZOOM = 18;
 static const int WIN_W = 1280, WIN_H = 900;
 static const int DRONE_TEX_MAX = 512;
 
+// Reference zoom used to express alignment corrections in mosaic-pixel space.
+static const int ALIGN_REF_ZOOM = 19;
+
+// ORB / matching parameters
+static const int   ORB_NFEATURES        = 3000;
+static const int   ALIGN_NEIGHBORS      = 4;     // up to N previous images to match against
+static const int   ALIGN_MIN_INLIERS    = 12;    // below this, fallback to GPS
+static const float ALIGN_RATIO          = 0.80f; // Lowe ratio test (looser)
+static const double ALIGN_RANSAC_METERS = 2.0;   // RANSAC inlier threshold in meters
+
 // ============ Math helpers ============
 double degToRad(double d) { return d * PI / 180.0; }
 double radToDeg(double r) { return r * 180.0 / PI; }
@@ -49,6 +63,11 @@ double lon2tilex(double lon, int z) { return (lon + 180.0) / 360.0 * (1 << z); }
 double lat2tiley(double lat, int z) {
     double latrad = degToRad(lat);
     return (1.0 - std::log(std::tan(latrad) + 1.0 / std::cos(latrad)) / PI) / 2.0 * (1 << z);
+}
+double tilex2lon(double tx, int z) { return tx / (double)(1 << z) * 360.0 - 180.0; }
+double tiley2lat(double ty, int z) {
+    double n = PI - 2.0 * PI * ty / (double)(1 << z);
+    return radToDeg(std::atan(0.5 * (std::exp(n) - std::exp(-n))));
 }
 
 double metersPerPixel(double lat, int z) {
@@ -72,6 +91,17 @@ struct DroneImage {
     bool cpuLoaded;
     bool visible;
     float yawAdjust;
+
+    // ORB features (in resized cpuW x cpuH pixel coords)
+    std::vector<cv::KeyPoint> kpts;
+    cv::Mat descriptors;
+
+    // Alignment result (corrects the GPS prediction)
+    double correctedLat, correctedLon;  // refined center
+    double correctedYaw;                // degrees, CW from north
+    double correctedScale;              // multiplier on GPS-predicted footprint size
+    int    alignInliers;                // 0 = not refined / failed
+    bool   alignAnchor;                 // true for image 0 — placed by GPS, no refinement
 };
 
 // ============ Simple JSON helpers ============
@@ -164,6 +194,12 @@ void readImagesJson(const std::string &odmDir, const std::string &imageDir,
         di.cpuLoaded = false;
         di.visible = true;
         di.yawAdjust = 0;
+        di.correctedLat = di.lat;
+        di.correctedLon = di.lon;
+        di.correctedYaw = di.yaw;
+        di.correctedScale = 1.0;
+        di.alignInliers = 0;
+        di.alignAnchor = false;
 
         if (di.lat != 0 && di.lon != 0) {
             out.push_back(di);
@@ -320,6 +356,8 @@ struct ViewState {
     int maxVisibleImages;
     int totalImages;
     float maxPitch; // filter out oblique images
+    bool useAlignment;       // toggle ORB-based refinement vs raw GPS
+    bool showAlignStatus;    // colored borders by alignment status
 };
 
 static ViewState view;
@@ -394,6 +432,8 @@ int main(int argc, char **argv) {
     view.maxVisibleImages = maxVisibleImages;
     view.totalImages = totalImages;
     view.maxPitch = 10.0f;
+    view.useAlignment = true;
+    view.showAlignStatus = true;
 
     // Init GLFW
     if (!glfwInit()) { fprintf(stderr, "GLFW init failed\n"); return 1; }
@@ -432,8 +472,47 @@ int main(int argc, char **argv) {
         tileThreads.emplace_back(tileWorker);
     }
 
+    // ============ Alignment helpers ============
+    // Predicted footprint (mosaic-px at ALIGN_REF_ZOOM) using current corrected pose.
+    auto poseFootprint = [&](const DroneImage &d, double &cxPx, double &cyPx,
+                             double &fpW, double &fpH, double &yawDeg) {
+        double altAGL = d.alt - view.groundElevation;
+        if (altAGL < 5) altAGL = 5;
+        double fx = d.focalX > 0 ? d.focalX : 0.7413;
+        double groundW = altAGL / fx;
+        double aspect = d.imgW > 0 ? (double)d.imgH / d.imgW : 0.75;
+        double groundH = groundW * aspect;
+        double mpp = metersPerPixel(d.correctedLat, ALIGN_REF_ZOOM);
+        fpW = (groundW / mpp) * d.correctedScale;
+        fpH = (groundH / mpp) * d.correctedScale;
+        cxPx = lon2tilex(d.correctedLon, ALIGN_REF_ZOOM) * TILE_SIZE;
+        cyPx = lat2tiley(d.correctedLat, ALIGN_REF_ZOOM) * TILE_SIZE;
+        yawDeg = d.correctedYaw;
+    };
+
+    // Map an image-pixel keypoint (u,v in [0,W)x[0,H)) to mosaic-px coords given a pose.
+    // Mirrors the GL transform: T(center) * R(yaw) * T(-ppOff) * v_local
+    auto imgPtToMosaic = [&](const DroneImage &d, double cxPx, double cyPx,
+                             double fpW, double fpH, double yawDeg,
+                             double u, double v) {
+        double localU = (u / d.cpuW - 0.5) * fpW;
+        double localV = (v / d.cpuH - 0.5) * fpH;
+        double ppOffX = d.cx * fpW;
+        double ppOffY = d.cy * fpH;
+        localU -= ppOffX;
+        localV -= ppOffY;
+        double a = degToRad(yawDeg);
+        double ca = std::cos(a), sa = std::sin(a);
+        double rx = ca * localU - sa * localV;
+        double ry = sa * localU + ca * localV;
+        return cv::Point2d(cxPx + rx, cyPx + ry);
+    };
+
     // Background drone texture loader — loads images as maxVisibleImages increases
     std::thread droneLoader([&]() {
+        cv::Ptr<cv::ORB> orb = cv::ORB::create(ORB_NFEATURES);
+        cv::BFMatcher matcher(cv::NORM_HAMMING, false);
+
         while (tileThreadRunning) {
             bool didWork = false;
             int limit = view.maxVisibleImages;
@@ -444,7 +523,12 @@ int main(int argc, char **argv) {
 
                 int w, h, ch;
                 unsigned char *img = stbi_load(di.path.c_str(), &w, &h, &ch, 4);
-                if (!img) { di.cpuLoaded = true; continue; } // mark to skip
+                if (!img) {
+                    fprintf(stderr, "[drone] stbi_load failed: %s (%s)\n",
+                            di.path.c_str(), stbi_failure_reason());
+                    di.cpuLoaded = true;
+                    continue;
+                }
 
                 int newW = w, newH = h;
                 if (w > DRONE_TEX_MAX || h > DRONE_TEX_MAX) {
@@ -462,6 +546,111 @@ int main(int argc, char **argv) {
                 di.cpuPixels = img;
                 di.cpuW = newW;
                 di.cpuH = newH;
+
+                // ---- ORB extraction on grayscale of the resized image ----
+                cv::Mat rgba(newH, newW, CV_8UC4, di.cpuPixels);
+                cv::Mat gray;
+                cv::cvtColor(rgba, gray, cv::COLOR_RGBA2GRAY);
+                orb->detectAndCompute(gray, cv::noArray(), di.kpts, di.descriptors);
+
+                // ---- Alignment: refine pose against earlier images ----
+                if (i == 0) {
+                    di.alignAnchor = true;
+                } else if (!di.descriptors.empty()) {
+                    // Predict pose for `di` from raw GPS (correctedLat/Lon/Yaw/Scale init = GPS)
+                    double cxA, cyA, fpWA, fpHA, yawA;
+                    poseFootprint(di, cxA, cyA, fpWA, fpHA, yawA);
+
+                    // RANSAC threshold expressed in mosaic-px at REF_ZOOM
+                    double mppRef = metersPerPixel(di.lat, ALIGN_REF_ZOOM);
+                    double ransacThresh = ALIGN_RANSAC_METERS / mppRef;
+
+                    // Pick up to ALIGN_NEIGHBORS earlier images that have features.
+                    // Allow GPS-fallback neighbors too — their pose is still close enough to seed.
+                    struct Cand { int idx; double dist; };
+                    std::vector<Cand> cands;
+                    cands.reserve(i);
+                    for (int j = 0; j < i; j++) {
+                        const auto &dj = droneImages[j];
+                        if (!dj.cpuLoaded || dj.descriptors.empty()) continue;
+                        double dlat = dj.correctedLat - di.lat;
+                        double dlon = dj.correctedLon - di.lon;
+                        cands.push_back({j, dlat*dlat + dlon*dlon});
+                    }
+                    std::sort(cands.begin(), cands.end(),
+                              [](const Cand &a, const Cand &b){ return a.dist < b.dist; });
+                    if ((int)cands.size() > ALIGN_NEIGHBORS) cands.resize(ALIGN_NEIGHBORS);
+
+                    // Accumulate matched mosaic-px point pairs across neighbors.
+                    std::vector<cv::Point2d> srcPts; // in di's predicted mosaic coords
+                    std::vector<cv::Point2d> dstPts; // in neighbor's corrected mosaic coords
+                    int totalRaw = 0, totalRatio = 0;
+                    for (const auto &c : cands) {
+                        const auto &dj = droneImages[c.idx];
+                        std::vector<std::vector<cv::DMatch>> knn;
+                        matcher.knnMatch(di.descriptors, dj.descriptors, knn, 2);
+                        totalRaw += (int)knn.size();
+
+                        double cxB, cyB, fpWB, fpHB, yawB;
+                        poseFootprint(dj, cxB, cyB, fpWB, fpHB, yawB);
+
+                        int kept = 0;
+                        for (auto &m : knn) {
+                            if (m.size() < 2) continue;
+                            if (m[0].distance > ALIGN_RATIO * m[1].distance) continue;
+                            const auto &kpA = di.kpts[m[0].queryIdx].pt;
+                            const auto &kpB = dj.kpts[m[0].trainIdx].pt;
+                            srcPts.push_back(imgPtToMosaic(di, cxA, cyA, fpWA, fpHA, yawA,
+                                                           kpA.x, kpA.y));
+                            dstPts.push_back(imgPtToMosaic(dj, cxB, cyB, fpWB, fpHB, yawB,
+                                                           kpB.x, kpB.y));
+                            kept++;
+                        }
+                        totalRatio += kept;
+                    }
+
+                    if (srcPts.size() >= (size_t)ALIGN_MIN_INLIERS) {
+                        std::vector<uchar> inliersMask;
+                        cv::Mat M = cv::estimateAffinePartial2D(
+                            srcPts, dstPts, inliersMask, cv::RANSAC, ransacThresh);
+                        int inliers = 0;
+                        if (!M.empty()) {
+                            for (auto v : inliersMask) if (v) inliers++;
+                        }
+                        if (inliers >= ALIGN_MIN_INLIERS) {
+                            double a  = M.at<double>(0, 0);
+                            double bb = M.at<double>(1, 0);
+                            double tx = M.at<double>(0, 2);
+                            double ty = M.at<double>(1, 2);
+                            double scaleCorr = std::sqrt(a*a + bb*bb);
+                            double rotCorr   = std::atan2(bb, a);
+
+                            double newCx = a * cxA - bb * cyA + tx;
+                            double newCy = bb * cxA +  a * cyA + ty;
+
+                            di.correctedLon = tilex2lon(newCx / TILE_SIZE, ALIGN_REF_ZOOM);
+                            di.correctedLat = tiley2lat(newCy / TILE_SIZE, ALIGN_REF_ZOOM);
+                            di.correctedYaw = di.yaw + radToDeg(rotCorr);
+                            di.correctedScale = scaleCorr;
+                            di.alignInliers = inliers;
+                            fprintf(stderr,
+                                "[align] %s OK  cands=%zu raw=%d ratio=%d inliers=%d  scale=%.3f rot=%+.2f\n",
+                                di.filename.c_str(), cands.size(), totalRaw, totalRatio,
+                                inliers, scaleCorr, radToDeg(rotCorr));
+                        } else {
+                            fprintf(stderr,
+                                "[align] %s FAIL inliers cands=%zu raw=%d ratio=%d inliers=%d (thresh=%.1fpx=%.1fm)\n",
+                                di.filename.c_str(), cands.size(), totalRaw, totalRatio,
+                                inliers, ransacThresh, ALIGN_RANSAC_METERS);
+                        }
+                    } else {
+                        fprintf(stderr,
+                            "[align] %s FAIL matches cands=%zu raw=%d ratio=%d (need %d)\n",
+                            di.filename.c_str(), cands.size(), totalRaw, totalRatio,
+                            ALIGN_MIN_INLIERS);
+                    }
+                }
+
                 di.cpuLoaded = true;
             }
             if (!didWork)
@@ -564,6 +753,10 @@ int main(int argc, char **argv) {
         for (auto &di : droneImages) {
             if (uploaded >= 2) break;
             if (di.texLoaded || !di.cpuLoaded) continue;
+            if (!di.cpuPixels || di.cpuW <= 0 || di.cpuH <= 0) {
+                di.texLoaded = true; // failed load, don't retry
+                continue;
+            }
             glGenTextures(1, &di.tex);
             glBindTexture(GL_TEXTURE_2D, di.tex);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -584,8 +777,14 @@ int main(int argc, char **argv) {
                 if (!di.texLoaded || !di.visible) continue;
                 if (std::abs(di.pitch) > view.maxPitch) continue;
 
-                double dx = lon2tilex(di.lon, z) * TILE_SIZE;
-                double dy = lat2tiley(di.lat, z) * TILE_SIZE;
+                bool useRefined = view.useAlignment;
+                double useLat   = useRefined ? di.correctedLat   : di.lat;
+                double useLon   = useRefined ? di.correctedLon   : di.lon;
+                double useYaw   = useRefined ? di.correctedYaw   : di.yaw;
+                double useScale = useRefined ? di.correctedScale : 1.0;
+
+                double dx = lon2tilex(useLon, z) * TILE_SIZE;
+                double dy = lat2tiley(useLat, z) * TILE_SIZE;
                 double screenX = dx - centerPixX + screenCX;
                 double screenY = dy - centerPixY + screenCY;
 
@@ -593,8 +792,6 @@ int main(int argc, char **argv) {
                     continue;
 
                 // Ground footprint using ODM normalized focal length
-                // focal_x is focal / image_width (normalized)
-                // Ground width = image_width / (focal_x * image_width) * altAGL = altAGL / focal_x
                 double altAGL = di.alt - view.groundElevation;
                 if (altAGL < 5) altAGL = 5;
                 double fx = di.focalX > 0 ? di.focalX : 0.7413;
@@ -602,31 +799,24 @@ int main(int argc, char **argv) {
                 double aspectRatio = (double)di.imgH / di.imgW;
                 double groundH = groundW * aspectRatio;
 
-                groundW *= view.scaleMultiplier;
-                groundH *= view.scaleMultiplier;
+                groundW *= view.scaleMultiplier * useScale;
+                groundH *= view.scaleMultiplier * useScale;
 
-                double mpp = metersPerPixel(di.lat, z);
+                double mpp = metersPerPixel(useLat, z);
                 double pixW = groundW / mpp;
                 double pixH = groundH / mpp;
 
-                // Yaw = heading (CW from North). In our Y-down screen, glRotatef(+angle) = CW.
-                // yaw=0 → no rotation (top=North), yaw=90 → top faces East. Matches directly.
-                float totalRot = (float)di.yaw + view.yawOffset + di.yawAdjust;
+                float totalRot = (float)useYaw + view.yawOffset + di.yawAdjust;
 
                 bool isSelected = (view.selectedImage == i);
                 float alpha = isSelected ? std::min(1.0f, view.droneOpacity + 0.2f) : view.droneOpacity;
 
-                // Account for principal point offset (c_x, c_y are normalized)
-                // This shifts the image center so the optical axis aligns with GPS position
                 double ppOffX = di.cx * pixW;
                 double ppOffY = di.cy * pixH;
 
                 glPushMatrix();
                 glTranslated(screenX, screenY, 0);
-                // kappa is rotation angle in degrees, counter-clockwise from East in photogrammetry
-                // In our Y-down screen coords, positive glRotatef = clockwise = correct for kappa
                 glRotatef(totalRot, 0, 0, 1);
-                // Shift by principal point offset
                 glTranslated(-ppOffX, -ppOffY, 0);
 
                 glBindTexture(GL_TEXTURE_2D, di.tex);
@@ -638,11 +828,20 @@ int main(int argc, char **argv) {
                 glTexCoord2f(0, 1); glVertex2d(-pixW/2,  pixH/2);
                 glEnd();
 
-                // Draw border for selected image
-                if (isSelected) {
+                // Border: yellow if selected; otherwise color-code alignment status if enabled.
+                bool drawBorder = isSelected || view.showAlignStatus;
+                if (drawBorder) {
                     glBindTexture(GL_TEXTURE_2D, 0);
-                    glColor4f(1, 1, 0, 1);
-                    glLineWidth(2.0f);
+                    if (isSelected) {
+                        glColor4f(1, 1, 0, 1);
+                    } else if (di.alignAnchor) {
+                        glColor4f(0.2f, 0.6f, 1.0f, 0.7f); // blue: anchor
+                    } else if (di.alignInliers >= ALIGN_MIN_INLIERS) {
+                        glColor4f(0.2f, 1.0f, 0.2f, 0.7f); // green: aligned
+                    } else {
+                        glColor4f(1.0f, 0.3f, 0.3f, 0.7f); // red: GPS fallback
+                    }
+                    glLineWidth(isSelected ? 2.5f : 1.5f);
                     glBegin(GL_LINE_LOOP);
                     glVertex2d(-pixW/2, -pixH/2);
                     glVertex2d( pixW/2, -pixH/2);
@@ -690,11 +889,27 @@ int main(int argc, char **argv) {
             view.maxPitch = 10.0f;
         }
 
+        ImGui::SeparatorText("Alignment (ORB)");
+        ImGui::Checkbox("Use ORB refinement", &view.useAlignment);
+        ImGui::SetItemTooltip("Off = raw GPS placement. On = each image refined against earlier neighbors.");
+        ImGui::Checkbox("Show status borders", &view.showAlignStatus);
+        ImGui::SetItemTooltip("Blue=anchor, green=aligned, red=GPS fallback");
+
         ImGui::SeparatorText("Info");
         int loadedCount = 0;
-        for (int i = 0; i < view.maxVisibleImages && i < (int)droneImages.size(); i++)
-            if (droneImages[i].texLoaded) loadedCount++;
+        int alignedCount = 0;
+        int fallbackCount = 0;
+        for (int i = 0; i < view.maxVisibleImages && i < (int)droneImages.size(); i++) {
+            const auto &dii = droneImages[i];
+            if (dii.texLoaded) loadedCount++;
+            if (dii.cpuLoaded) {
+                if (dii.alignAnchor) {} // anchor not counted as "aligned"
+                else if (dii.alignInliers >= ALIGN_MIN_INLIERS) alignedCount++;
+                else fallbackCount++;
+            }
+        }
         ImGui::Text("Images loaded: %d / %d (total: %d)", loadedCount, view.maxVisibleImages, view.totalImages);
+        ImGui::Text("Aligned: %d   GPS fallback: %d", alignedCount, fallbackCount);
         ImGui::Text("FPS: %.0f", io.Framerate);
 
         ImGui::End();
@@ -718,6 +933,18 @@ int main(int argc, char **argv) {
                 ImGui::Text("Yaw: %.1f  Pitch: %.1f  Roll: %.1f", di.yaw, di.pitch, di.roll);
                 ImGui::Text("Kappa: %.1f  Omega: %.1f  Phi: %.1f", di.kappa, di.omega, di.phi);
                 ImGui::Text("Focal_x: %.4f  Size: %d x %d", di.focalX, di.imgW, di.imgH);
+
+                if (di.alignAnchor) {
+                    ImGui::TextColored(ImVec4(0.4f,0.7f,1,1), "Alignment: anchor (GPS)");
+                } else if (di.alignInliers >= ALIGN_MIN_INLIERS) {
+                    ImGui::TextColored(ImVec4(0.4f,1,0.4f,1),
+                        "Aligned: inliers=%d  scale=%.3f  dYaw=%.2f deg",
+                        di.alignInliers, di.correctedScale, di.correctedYaw - di.yaw);
+                } else if (di.cpuLoaded) {
+                    ImGui::TextColored(ImVec4(1,0.4f,0.4f,1), "Alignment: GPS fallback");
+                } else {
+                    ImGui::TextDisabled("Alignment: pending...");
+                }
 
                 ImGui::Separator();
                 ImGui::SliderFloat("Rot. Adjust", &di.yawAdjust, -180.0f, 180.0f, "%.1f");
